@@ -42,7 +42,12 @@ const regionRes = document.getElementById('region')
 
 searchButton.addEventListener("click",()=>{
     const location = locationInput.value 
-    if(location)
+    if(location.length==0)
+        {
+            alert("Enter value")
+            return
+        }
+    else(location)
         getWeather(location)
 } )
 
