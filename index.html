@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+    
+        <h1>Weather App</h1>
+    
+        <input type="text" id="locationInput" placeholder="Enter a city">
+
+        <button id="searchButton">Search</button>
+        
+        <div class="weather-info">
+            <img src="sample.png" id="image"  />
+            <h2 id="location"></h2>
+            <p id="region"></p>
+            <p id="temperature"></p>
+            <p id="description"></p>
+            <p id="last_updated"></p>
+        </div>
+    
+    </div>
+    <script>
+        // https://www.weatherapi.com/
+
+let url="http://api.weatherapi.com/v1/current.json"
+const apiKey="c9f05102cc9b4de2b2645539241106"
+
+const locationInput = document.getElementById('locationInput')
+const searchButton = document.getElementById('searchButton')
+const locationRes = document.getElementById('location')
+const tempRes = document.getElementById('temperature')
+const description = document.getElementById('description')
+const lastUpdated = document.getElementById('last_updated')
+const imgRes = document.getElementById('image')
+const regionRes = document.getElementById('region')
+
+searchButton.addEventListener("click",()=>{
+    const location = locationInput.value 
+    if(location)
+        getWeather(location)
+} )
+
+async function getWeather(city)
+{   
+    const temp = `${url}?q=${city}&key=${apiKey}`
+    const res = await fetch(temp)
+    console.log(res)
+    try {
+        if(res.ok)
+            {
+                const data = await res.json()
+                console.log(data)
+                locationRes.textContent=`Location : ${data.location.name}`
+                regionRes.textContent=`Region: ${data.location.region}`
+                tempRes.textContent = `Temperature: ${data.current.temp_c}°C`
+                description.textContent=`Condition: ${data.current.condition.text}`
+                lastUpdated.textContent =`Last Updated: ${data.current.last_updated}` 
+                imgRes.src=data.current.condition.icon
+            }
+        else
+        {
+            locationRes.textContent = "Enter a correct value"
+            tempRes.textContent=""
+            description.textContent=""
+            lastUpdated.textContent=""
+            imgRes.src="sample.png"
+            regionRes.textContent=" "
+        }
+    } catch (error) {
+        console.log(error)
+        
+    }
+  
+}
+    </script>
+</body>
+</html>
